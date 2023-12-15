@@ -11,6 +11,10 @@ java {
     sourceCompatibility = '21'
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 repositories {
     mavenCentral()
 }
@@ -30,6 +34,8 @@ dependencies {
     // https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
     implementation group: 'com.alibaba.fastjson2', name: 'fastjson2', version: '2.0.42'
     implementation 'io.netty:netty-all:4.1.101.Final'
+    // https://mvnrepository.com/artifact/org.mybatis/mybatis
+    implementation group: 'org.mybatis', name: 'mybatis', version: '3.5.14'
 
 
 
@@ -39,3 +45,5 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+
