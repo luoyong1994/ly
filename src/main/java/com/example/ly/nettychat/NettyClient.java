@@ -70,7 +70,7 @@ public class NettyClient implements Runnable {
 
             //发送消息
             while (true) {
-                Thread.sleep(5);
+                Thread.sleep(50);
                 channel.writeAndFlush(new TextWebSocketFrame("one-" + userId + "|#say：test" + atomicInteger.incrementAndGet() + "|" + userId));
             }
         } catch (Exception e) {
@@ -92,18 +92,18 @@ public class NettyClient implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
 //        java -cp myjar.jar com.example.ly.nettychat.NettyClient
-        String threadstr = args[0];
-        if (StringUtils.isBlank(threadstr)) {
-            threadstr = "1";
-        }
-        int threadNum = Integer.parseInt(threadstr);
-        CopyOnWriteArrayList<Thread> threads = new CopyOnWriteArrayList<>();
-        for (int i = 0; i < threadNum; i++) {
+//        String threadstr = args[0];
+//        if (StringUtils.isBlank(threadstr)) {
+//            threadstr = "1";
+//        }
+//        int threadNum = Integer.parseInt(threadstr);
+//        CopyOnWriteArrayList<Thread> threads = new CopyOnWriteArrayList<>();
+        for (int i = 0; i < 2000; i++) {
             Thread.sleep(1);
             String userId = UUID.randomUUID().toString().replace("-", "");
             Thread thread = new Thread(new NettyClient(userId));
             thread.start();
-            threads.add(thread);
+//            threads.add(thread);
         }
     }
 

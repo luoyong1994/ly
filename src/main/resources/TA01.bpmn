@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:activiti="http://activiti.org/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" id="diagram_TA01" targetNamespace="http://activiti.org/bpmn" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <bpmn2:process id="TA01" name="TA01" isExecutable="true">
+    <bpmn2:startEvent id="Event_1758i8g" name="开始事件">
+      <bpmn2:outgoing>Flow_1d77qc1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:userTask id="Activity_0kejv0o" name="员工申请" activiti:formKey="a" activiti:assignee="1">
+      <bpmn2:extensionElements>
+        <activiti:formProperty id="s" label="a" type="string" defaultValue="a" required="false" readable="true" writable="true" variable="true" />
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>Flow_1d77qc1</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_1kk8lb0</bpmn2:outgoing>
+    </bpmn2:userTask>
+    <bpmn2:sequenceFlow id="Flow_1d77qc1" sourceRef="Event_1758i8g" targetRef="Activity_0kejv0o" />
+    <bpmn2:endEvent id="Event_0vxs8s6" name="结束事件">
+      <bpmn2:incoming>Flow_0j49rpi</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:userTask id="Activity_0r1r9ai" name="部门负责人">
+      <bpmn2:incoming>Flow_1kk8lb0</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_0j49rpi</bpmn2:outgoing>
+    </bpmn2:userTask>
+    <bpmn2:sequenceFlow id="Flow_1kk8lb0" sourceRef="Activity_0kejv0o" targetRef="Activity_0r1r9ai" />
+    <bpmn2:sequenceFlow id="Flow_0j49rpi" sourceRef="Activity_0r1r9ai" targetRef="Event_0vxs8s6" />
+    <bpmn2:startEvent id="Event_06rao64" name="开始事件" activiti:formKey="test-start">
+      <bpmn2:extensionElements>
+        <activiti:formProperty id="test_001" label="姓名" type="string" readable="true" writable="true" variable="true" />
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>Flow_16eemjm</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:userTask id="Activity_1bix4pk" name="用户任务" activiti:formKey="test-user" activiti:assignee="1">
+      <bpmn2:extensionElements>
+        <activiti:formProperty id="test-user" label="age" type="string" />
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>Flow_16eemjm</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_1nbdqds</bpmn2:outgoing>
+    </bpmn2:userTask>
+    <bpmn2:endEvent id="Event_0w3ddft" name="结束事件">
+      <bpmn2:incoming>Flow_1nbdqds</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="Flow_16eemjm" sourceRef="Event_06rao64" targetRef="Activity_1bix4pk" />
+    <bpmn2:sequenceFlow id="Flow_1nbdqds" sourceRef="Activity_1bix4pk" targetRef="Event_0w3ddft" />
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TA01">
+      <bpmndi:BPMNEdge id="Flow_0j49rpi_di" bpmnElement="Flow_0j49rpi">
+        <di:waypoint x="-140" y="-170" />
+        <di:waypoint x="-78" y="-170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kk8lb0_di" bpmnElement="Flow_1kk8lb0">
+        <di:waypoint x="-280" y="-170" />
+        <di:waypoint x="-240" y="-170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1d77qc1_di" bpmnElement="Flow_1d77qc1">
+        <di:waypoint x="-452" y="-170" />
+        <di:waypoint x="-380" y="-170" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16eemjm_di" bpmnElement="Flow_16eemjm">
+        <di:waypoint x="278" y="270" />
+        <di:waypoint x="520" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nbdqds_di" bpmnElement="Flow_1nbdqds">
+        <di:waypoint x="620" y="270" />
+        <di:waypoint x="832" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1758i8g_di" bpmnElement="Event_1758i8g" bioc:stroke="#000" bioc:fill="#fff">
+        <dc:Bounds x="-488" y="-188" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="-492" y="-145" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kejv0o_di" bpmnElement="Activity_0kejv0o">
+        <dc:Bounds x="-380" y="-210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vxs8s6_di" bpmnElement="Event_0vxs8s6" bioc:stroke="#000" bioc:fill="#fff">
+        <dc:Bounds x="-78" y="-188" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="-82" y="-145" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0r1r9ai_di" bpmnElement="Activity_0r1r9ai">
+        <dc:Bounds x="-240" y="-210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0w3ddft_di" bpmnElement="Event_0w3ddft">
+        <dc:Bounds x="832" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="828" y="295" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1bix4pk_di" bpmnElement="Activity_1bix4pk">
+        <dc:Bounds x="520" y="230" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_06rao64_di" bpmnElement="Event_06rao64">
+        <dc:Bounds x="242" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="238" y="295" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

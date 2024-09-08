@@ -1,8 +1,16 @@
 package com.example.ly;
 
-public class Test {
+public class Test extends Object {
 
     private Test() {
+
+        try{
+            Class<?> r = Class.forName("");
+            Class<?>[] interfaces = r.getInterfaces();
+
+        }catch (Exception e){
+
+        }
     }
 
     private User user;
@@ -17,6 +25,10 @@ public class Test {
         public Test build() {
             test.user.setName("luoyong");
             return test;
+
+
+
+
         }
 
     }

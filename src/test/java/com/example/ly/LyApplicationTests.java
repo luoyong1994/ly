@@ -2,13 +2,23 @@ package com.example.ly;
 
 import com.alibaba.fastjson2.JSON;
 import org.flowable.engine.*;
+import org.flowable.engine.history.HistoricActivityInstance;
+import org.flowable.engine.history.HistoricActivityInstanceQuery;
+import org.flowable.engine.history.HistoricDetail;
+import org.flowable.engine.history.HistoricDetailQuery;
 import org.flowable.engine.history.HistoricProcessInstance;
+import org.flowable.engine.history.HistoricProcessInstanceQuery;
+import org.flowable.engine.impl.DeploymentQueryImpl;
 import org.flowable.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.flowable.engine.impl.persistence.entity.ModelEntityImpl;
+import org.flowable.engine.impl.persistence.entity.ResourceEntityImpl;
 import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.repository.DeploymentBuilder;
 import org.flowable.engine.repository.Model;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.api.Task;
+import org.flowable.variable.api.history.HistoricVariableInstance;
+import org.flowable.variable.api.history.HistoricVariableInstanceQuery;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,10 +37,12 @@ class LyApplicationTests {
 
     @BeforeEach
     void contextLoads() {
-        ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration().setJdbcUrl("jdbc:mysql://192.168.36.130:3306/flowable?serverTimezone=UTC&&nullCatalogMeansCurrent=true&useSSL=false&allowPublicKeyRetrieval=true").setJdbcUsername("root").setJdbcPassword("Root@123456").setJdbcDriver("com.mysql.cj.jdbc.Driver")
+        ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration().setJdbcUrl("jdbc:mysql://192.168.248.130:3306/flowable?serverTimezone=UTC&&nullCatalogMeansCurrent=true&useSSL=false&allowPublicKeyRetrieval=true")
+                .setJdbcUsername("root").setJdbcPassword("Qwer#123").setJdbcDriver("com.mysql.cj.jdbc.Driver")
                 // 如果数据库中的表结构不存在就新建
                 .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
         processEngine = cfg.buildProcessEngine();
+
     }
 
 
@@ -41,7 +53,13 @@ class LyApplicationTests {
         ModelEntityImpl modelEntity = new ModelEntityImpl();
         modelEntity.setKey("LeaveApplication");
         modelEntity.setName("请假流程");
+
+        ResourceEntityImpl resourceEntity = new ResourceEntityImpl();
         repositoryService.saveModel(modelEntity);
+
+
+
+
 
     }
 
@@ -61,7 +79,8 @@ class LyApplicationTests {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         InputStream systemResourceAsStream = ClassLoader.getSystemResourceAsStream("holiday.bpmn20.xml");
         byte[] bytes = systemResourceAsStream.readAllBytes();
-        repositoryService.addModelEditorSource("2501", bytes);
+        repositoryService.addModelEditorSource("1", bytes);
+
     }
 
 
@@ -82,7 +101,7 @@ class LyApplicationTests {
         RepositoryService repositoryService = processEngine.getRepositoryService();
 
         //xml
-        byte[] modelEditorSource = repositoryService.getModelEditorSource("2501");
+        byte[] modelEditorSource = repositoryService.getModelEditorSource("1");
         String xml = new String(modelEditorSource);
 
         //发布
@@ -101,8 +120,11 @@ class LyApplicationTests {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         List<Deployment> list = repositoryService.createDeploymentQuery().list();
         list.stream().forEach(item -> {
-            System.out.println("发布实例有：" + item.getId());
+            System.out.println("发布资源有：" + item.getId());
         });
+
+        
+
 
     }
 
@@ -145,6 +167,19 @@ class LyApplicationTests {
     public void TestQueryTask() {
         TaskService taskService = processEngine.getTaskService();
         List<Task> tasks = taskService.createTaskQuery().taskAssignee("luoyong3").list();
+//        List<Task> tasks = taskService.createTaskQuery().processInstanceId("32501").list();
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println(("查询getId " + i + 1) + ") " + tasks.get(i).getId());
+            System.out.println(("查询getName " + i + 1) + ") " + tasks.get(i).getName());
+        }
+    }
+
+
+    @Test
+    public void TestQueryTaskSecond() {
+        TaskService taskService = processEngine.getTaskService();
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateOrAssigned("luoyong3").list();
+//        List<Task> tasks = taskService.createTaskQuery().processInstanceId("32501").list();
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println(("查询getId " + i + 1) + ") " + tasks.get(i).getId());
             System.out.println(("查询getName " + i + 1) + ") " + tasks.get(i).getName());
@@ -154,6 +189,7 @@ class LyApplicationTests {
 
     @Test
     public void TestCompleteTask() {
+        //40001
         TaskService taskService = processEngine.getTaskService();
         Task task = taskService.createTaskQuery().taskAssignee("luoyong3").singleResult();
         Map<String, Object> variables = new HashMap<String, Object>();
@@ -163,27 +199,37 @@ class LyApplicationTests {
         System.out.println(taskService.getVariables(task.getId()));
         variables.put("status", "approve");
         taskService.complete(task.getId(), variables);
+
     }
 
 
     @Test
     public void TestQuerySecondTask() {
         TaskService taskService = processEngine.getTaskService();
-        List<Task> leaveApplication = taskService.createTaskQuery().taskCandidateOrAssigned("lisi").list();
+        List<Task> leaveApplication = taskService.createTaskQuery().taskCandidateOrAssigned("zhangsan").list();
         leaveApplication.stream().forEach(item -> {
             System.out.println("--------任务查询-----------------");
         });
+
     }
 
     @Test
     public void queryHistory() {
         HistoryService historyService = processEngine.getHistoryService();
-        List<HistoricProcessInstance> leaveApplication = historyService.createHistoricProcessInstanceQuery().processInstanceId("42501").list();
+        List<HistoricProcessInstance> leaveApplication = historyService.createHistoricProcessInstanceQuery().processInstanceId("40001").list();
         leaveApplication.stream().forEach(item -> {
             Map<String, Object> processVariables = item.getProcessVariables();
             System.out.println("变量" + JSON.toJSONString(processVariables));
             System.out.println("结果：" + JSON.toJSONString(item));
         });
+        HistoricActivityInstanceQuery historicActivityInstanceQuery = historyService.createHistoricActivityInstanceQuery();
+        List<HistoricActivityInstance> list = historicActivityInstanceQuery.processInstanceId("40001").list();
+        list.stream().forEach(item->{
+            System.out.println(item);
+        });
+
+
+
     }
 
 
@@ -196,14 +242,18 @@ class LyApplicationTests {
         Map<String, Object> processVariables = task.getProcessVariables();
         System.out.println("流程中的变量：" + JSON.toJSONString(taskService.getVariables(task.getId())));
         Map<String, Object> hashMap = new HashMap<>();
-        hashMap.put("status", "reject");
+        hashMap.put("status", "approve");
         taskService.complete(task.getId(), hashMap);
+
     }
 
     @Test
     public void taskQuery() {
-
-
+        HistoryService historyService = processEngine.getHistoryService();
+        List<HistoricVariableInstance> list = historyService.createHistoricVariableInstanceQuery().processInstanceId("40001").list();
+        list.stream().forEach(item->{
+            System.out.println(item);
+        });
     }
 
 }
